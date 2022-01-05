@@ -1,25 +1,41 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import './App.css';
 
-function App() {
+const App = () => {
+
+  const [quotes, setQuotes] = useState({
+      quote: "",
+      anime: "",
+      character: ""
+  });
+
+  useEffect(() => {
+    getData();
+  }, [])
+
+
+  const getData = () => {
+    axios.get(`https://animechan.vercel.app/api/random`).then((res) => {
+      setQuotes(res.data);
+    }).catch((error) => {
+      console.log("Error", error);
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <blockquote>
+        {" "}
+        <q>{quotes.quote}</q>
+        <cite>
+          <b>{quotes.character}</b> famous in - {quotes.anime}
+        </cite>
+        <button onClick={getData}>Refresh Quotes</button>
+      </blockquote>
     </div>
-  );
+  )
 }
 
 export default App;
+
